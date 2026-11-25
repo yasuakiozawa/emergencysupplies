@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医療機関向け アルコール手指消毒剤 備蓄量算定ツール</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter / Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maruishi: {
+                            50: '#fdf2f2',
+                            100: '#fde6e6',
+                            200: '#fbd0d0',
+                            600: '#c52828',
+                            700: '#a31d1d',
+                            800: '#8c1c1c',
+                            900: '#731919',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fcf8f8;
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 15px -1px rgba(140, 28, 28, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="h-full text-slate-700 flex flex-col">
+
+    <!-- Header styled according to website branding -->
+    <header class="bg-white border-b-2 border-maruishi-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-maruishi-50 rounded-full border border-maruishi-200">
+                    <i class="fa-solid fa-pump-medical text-2xl text-maruishi-800"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-800">医療機関向け アルコール手指消毒剤 備蓄量算定ツール</h1>
+                    <p class="text-xs sm:text-sm text-maruishi-800 font-medium mt-0.5">災害・感染症流行時に備えた、アルコール手指消毒剤の備蓄計画を支援します</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 space-y-6">
+
+        <!-- Info Banner / Guidelines Note (Top Position) -->
+        <div class="bg-maruishi-50/60 border-l-4 border-maruishi-800 p-4 rounded-r-2xl custom-shadow">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 pt-0.5">
+                    <i class="fa-solid fa-circle-info text-maruishi-800 text-lg"></i>
+                </div>
+                <div class="ml-3">
+                    <div class="text-xs sm:text-sm text-slate-800 space-y-3">
+                        <p class="leading-relaxed">本ツールは、医療機関におけるアルコール手指消毒剤の実際の払い出し量・使用量をもとに、設定した日数分の必要備蓄量を試算するツールです。<br>
+平常時の購入実績を基礎として、災害による断水・物流の停滞や、新興感染症の流行などを想定した備蓄計画の検討にご活用いただけます。<br>
+施設の実情や購入実績に応じて各条件を設定し、必要備蓄量の把握や備蓄計画の検討にお役立てください。</p>
+                        
+                        <div class="bg-white/90 p-3 rounded-xl border border-maruishi-200/80 text-slate-700">
+                            <p class="font-bold text-maruishi-900 mb-1">【ご利用にあたって】</p>
+                            <ul class="list-disc list-inside space-y-1 text-xs">
+                                <li>算定結果は、入力条件に基づく試算値です。</li>
+                                <li>アルコール手指消毒剤について、国が一律に定めた備蓄日数・備蓄量を示すものではありません。</li>
+                                <li>備蓄日数や需要の増加率は、施設の診療機能、感染対策方針、災害想定、供給体制などを踏まえて設定してください。</li>
+                                <li>手指衛生は、アルコール手指消毒剤だけで全ての場面に対応できるものではありません。石けんと流水による手洗いが必要な場面も考慮してください。</li>
+                            </ul>
+                        </div>
+
+                        <p class="text-[11px] text-maruishi-800 italic">※本ツールは備蓄計画の検討を支援するものであり、感染対策上の判断や施設ごとの備蓄計画に代わるものではありません。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            
+            <!-- INPUT COLUMN -->
+            <div class="space-y-6">
+                
+                <!-- SECTION 1: Scenario & Stockpile Days -->
+                <section class="bg-white rounded-2xl p-5 sm:p-6 custom-shadow border border-slate-100">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center mb-4">
+                        <span class="flex items-center justify-center w-7 h-7 bg-maruishi-50 text-maruishi-800 rounded-full text-sm mr-2.5 font-bold border border-maruishi-200">1</span>
+                        想定シナリオ・備蓄日数の設定
+                    </h2>
+
+                    <div class="mb-4 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-600 space-y-2">
+                        <div>
+                            <p class="font-bold text-slate-800 mb-1">想定シナリオ</p>
+                            <ul class="list-disc list-inside space-y-0.5 text-slate-600">
+                                <li>災害・ライフライン停止</li>
+                                <li>新興感染症・パンデミック</li>
+                                <li>施設独自の想定</li>
+                            </ul>
+                        </div>
+                        <div class="pt-1.5 border-t border-slate-200/60">
+                            <p class="font-bold text-slate-800 mb-1">備蓄設定日数 (日)</p>
+                            <p class="leading-relaxed">備蓄計画の目標とする日数を入力してください。災害時の断水・物流停止の想定や、感染症流行時の需要、調達の見通しなどを踏まえ、施設ごとに設定してください。<br>
+                            <span class="text-slate-500 italic">※選択したシナリオだけで、国が推奨する備蓄日数が決まるものではありません。</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">想定するシナリオ</label>
+                            <select id="disasterType" onchange="updateDefaultDays()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2.5 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                <option value="earthquake">災害・ライフライン停止</option>
+                                <option value="pandemic" selected>新興感染症・パンデミック</option>
+                                <option value="custom">施設独自の想定</option>
+                            </select>
+                            <p id="scenarioReferenceText" class="text-[11px] text-slate-500 mt-1.5 font-medium bg-slate-50 p-2 rounded-lg border border-slate-200/60">
+                                参考：PPEは使用量2か月分以上（アルコール手指消毒剤には直接適応されません）
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">備蓄設定日数 (日)</label>
+                            <input type="number" id="stockpileDays" value="60" min="1" max="365" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2.5 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Scenario Notes -->
+                    <div id="scenarioNotesContainer" class="mt-4 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-700 space-y-1.5">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Alcohol Products Parameters (Base) -->
+                <section class="bg-white rounded-2xl p-5 sm:p-6 custom-shadow border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center">
+                            <span class="flex items-center justify-center w-7 h-7 bg-maruishi-50 text-maruishi-800 rounded-full text-sm mr-2.5 font-bold border border-maruishi-200">2</span>
+                            アルコール手指消毒剤の設定
+                        </h2>
+                    </div>
+
+                    <div class="mb-4 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-600 space-y-2">
+                        <p class="leading-relaxed">対象とする製品と1本あたりの容量、および平時（1か月間）の平均払い出し量・使用量（本数）を入力してください。<br>
+                        ご入力いただいた情報に基づき、各製品の必要備蓄量を算定します。<br>
+                        <span class="text-maruishi-800 font-medium">※ご使用のアルコール手指消毒剤の仕様や採用状況に応じて登録・設定してください。</span></p>
+                    </div>
+
+                    <div class="space-y-4" id="productsContainer">
+                        <!-- Product 1 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3" data-product-id="1">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p1Name" value="製品1" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p1NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 1</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p1Volume" value="1000" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p1Dose" value="3.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p1MonthlyQty" value="100" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 2 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="2">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p2Name" value="製品2" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p2NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 2</span>
+                                    <button type="button" onclick="removeProduct(2)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p2Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p2Dose" value="1.5" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p2MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 3 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="3">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p3Name" value="製品3" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p3NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 3</span>
+                                    <button type="button" onclick="removeProduct(3)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p3Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p3Dose" value="1.5" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p3MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 4 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="4">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p4Name" value="製品4" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p4NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 4</span>
+                                    <button type="button" onclick="removeProduct(4)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p4Volume" value="250" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p4Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p4MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 5 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="5">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p5Name" value="製品5" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p5NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 5</span>
+                                    <button type="button" onclick="removeProduct(5)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p5Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p5Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p5MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 6 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="6">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p6Name" value="製品6" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p6NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 6</span>
+                                    <button type="button" onclick="removeProduct(6)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p6Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p6Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p6MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 7 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="7">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p7Name" value="製品7" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p7NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 7</span>
+                                    <button type="button" onclick="removeProduct(7)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p7Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p7Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p7MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 8 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="8">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p8Name" value="製品8" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p8NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 8</span>
+                                    <button type="button" onclick="removeProduct(8)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p8Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p8Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p8MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 9 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="9">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p9Name" value="製品9" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p9NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 9</span>
+                                    <button type="button" onclick="removeProduct(9)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p9Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p9Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p9MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 10 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 hidden" data-product-id="10">
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div class="w-full max-w-xs">
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">製品名</label>
+                                    <input type="text" id="p10Name" value="製品10" onchange="onProductNameChange()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer">
+                                        <input type="checkbox" id="p10NonHazardous" onchange="calculateStockpile()" class="rounded text-maruishi-800 focus:ring-maruishi-800">
+                                        <span>非危険物に該当</span>
+                                    </label>
+                                    <span class="text-xs text-maruishi-800 font-bold">製品 10</span>
+                                    <button type="button" onclick="removeProduct(10)" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                        <i class="fa-solid fa-trash-can mr-1"></i>削除
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1本あたりの容量 (mL)</label>
+                                    <input type="number" id="p10Volume" value="500" min="1" onchange="onProductVolumeChange()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1回使用量 (mL) <span class="text-[10px] font-normal text-slate-400">※病棟算定用</span></label>
+                                    <input type="number" id="p10Dose" value="2.0" step="0.1" min="0.1" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">1か月間の平均払い出し量・使用量 (本/月)</label>
+                                    <input type="number" id="p10MonthlyQty" value="0" min="0" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs Container -->
+                    <div class="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-200" id="productTabsContainer">
+                        <!-- Tab buttons dynamically handled/styled in JS -->
+                    </div>
+                </section>
+
+                <!-- SECTION 3: Bed Categories (Optional check for medical procedures) -->
+                <section class="bg-white rounded-2xl p-5 sm:p-6 custom-shadow border border-slate-100">
+                    <button type="button" onclick="toggleBedSection()" class="w-full flex items-center justify-between text-left focus:outline-none">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center">
+                            <span class="flex items-center justify-center w-7 h-7 bg-maruishi-50 text-maruishi-800 rounded-full text-sm mr-2.5 font-bold border border-maruishi-200">3</span>
+                            病棟別の使用量を確認する場合はこちら
+                            <span class="ml-2.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">任意・参考算定</span>
+                        </h2>
+                        <i id="bedSectionChevron" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+                    </button>
+
+                    <div id="bedSectionContent" class="hidden mt-4">
+                        <div class="mb-4 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-600 space-y-2">
+                            <p class="leading-relaxed">【任意設定】払い出し実績とは別に、病棟での医療行為・患者ケアに必要な手指消毒剤の数量（目安）を把握したい場合に、病床数、稼働率、患者1人あたりの手指衛生実施回数を入力してください。<br>
+                            手指衛生実施回数は、施設の実績データや感染対策上の運用を参考に設定してください。病棟の特性やケア内容によって実施頻度は異なります。<br>
+                            <span class="text-maruishi-800 font-medium">※医療従事者の患者ケアにおける使用回数を入力してください</span></p>
+                        </div>
+
+                        <div class="space-y-4" id="wardBlocksContainer">
+                            <!-- Ward blocks (1 to 20) dynamically rendered by JS -->
+                        </div>
+
+                        <!-- Bed Category Add Buttons -->
+                        <div class="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-200" id="bedTabsContainer">
+                            <button type="button" id="addWardBtn" onclick="addWardCategory()" class="px-3 py-1.5 rounded-full text-xs bg-maruishi-50 text-maruishi-800 hover:bg-maruishi-100 font-bold border border-maruishi-200 transition-colors flex items-center gap-1">
+                                <i class="fa-solid fa-plus text-[10px]"></i>病棟別に設定する
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- OUTPUT COLUMN (Sticky right on large screens) -->
+            <div class="space-y-6 lg:sticky lg:top-6">
+                
+                <!-- SUMMARY CARD - Soft & Gentle Palette replacing dark theme -->
+                <div class="bg-white rounded-2xl p-6 custom-shadow border border-maruishi-100 space-y-6">
+                    <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
+                        <h2 class="text-base font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-chart-pie text-maruishi-800 mr-2"></i>
+                            算定結果サマリー
+                        </h2>
+                        <span class="text-xs text-slate-400 font-medium">リアルタイム自動試算</span>
+                    </div>
+
+                    <!-- Single column layout for summary metrics -->
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Required Stock Summary Box (Base: Payout) -->
+                        <div class="bg-gradient-to-br from-maruishi-50 to-rose-50/40 rounded-2xl p-5 border border-maruishi-200/60">
+                            <div class="text-xs text-maruishi-900 font-bold flex justify-between items-center">
+                                <span>各製品の必要備蓄量（払い出し量ベース）</span>
+                                <span id="resDisasterDaysTag" class="bg-maruishi-800 text-white px-2.5 py-0.5 rounded-full text-[11px] font-semibold">60日分</span>
+                            </div>
+                            <div class="mt-3 flex justify-between items-baseline">
+                                <div class="text-4xl font-black text-maruishi-900 tracking-tight"><span id="resDisasterLitres">0.0</span> <span class="text-base font-bold">L</span></div>
+                            </div>
+                            <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-white/80 rounded-xl p-2.5 border border-amber-200/80">
+                                    <div class="text-[11px] text-amber-900 font-semibold flex items-center">
+                                        <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i>危険物該当製剤
+                                    </div>
+                                    <div class="mt-1 font-bold text-slate-800"><span id="resHazardousLitres" class="text-base text-amber-900">0.0</span> L <span class="text-[11px] font-normal text-slate-600">(<span id="resHazardousBottles">0</span> 本)</span></div>
+                                </div>
+                                <div class="bg-white/80 rounded-xl p-2.5 border border-emerald-200/80">
+                                    <div class="text-[11px] text-emerald-900 font-semibold flex items-center">
+                                        <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i>非危険物製剤
+                                    </div>
+                                    <div class="mt-1 font-bold text-slate-800"><span id="resNonHazardousLitres" class="text-base text-emerald-900">0.0</span> L <span class="text-[11px] font-normal text-slate-600">(<span id="resNonHazardousBottles">0</span> 本)</span></div>
+                                </div>
+                            </div>
+                            <div id="bottleCountBreakdown" class="mt-4 pt-3 border-t border-maruishi-200/60 text-xs text-slate-700 space-y-2">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Optional Reference Box: Medical Procedures in Wards -->
+                        <div id="wardReferenceBox" class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 hidden">
+                            <div class="text-xs text-slate-800 font-bold flex justify-between items-center">
+                                <span class="flex items-center">
+                                    <i class="fa-solid fa-bed-pulse text-maruishi-800 mr-1.5"></i>
+                                    【参考】病棟での医療行為に必要な数量目安
+                                </span>
+                                <span id="resWardDaysTag" class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full text-[10px] font-semibold">60日分</span>
+                            </div>
+                            <div class="mt-2 flex justify-between items-baseline">
+                                <div class="text-2xl font-bold text-slate-800"><span id="resWardLitres">0.0</span> <span class="text-xs font-bold">L</span></div>
+                                <div class="text-[11px] text-slate-500">1日あたり <span id="resWardDailyLitres" class="font-bold text-slate-700">0.0</span> L（計 <span id="resWardDailyOps" class="font-bold text-slate-700">0</span> 回/日）</div>
+                            </div>
+                            <div id="wardBottleBreakdown" class="mt-2.5 pt-2.5 border-t border-slate-200/80 text-xs text-slate-600 space-y-1.5">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                            <p class="mt-2 text-[11px] text-slate-500 leading-relaxed">
+                                ※上記「払い出し量ベース」の必要備蓄量のうち、病棟での患者ケア（医療行為）に充てられる数量の目安です（合計値には二重計上していません）。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FIRE LAW AREA -->
+                    <div class="grid grid-cols-1 gap-6 pt-2 border-t border-slate-100">
+                        <!-- Visual Fire Law Gauge & Alert Block -->
+                        <div id="fireLawAlert" class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-3 flex flex-col justify-between">
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center text-xs">
+                                    <div class="font-bold text-slate-800 flex items-center">
+                                        <i class="fa-solid fa-fire-flame-curved mr-1.5 text-amber-500"></i>
+                                        消防法 危険物規制ステージ（危険物該当製剤合計）
+                                    </div>
+                                    <span id="fireLawBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">判定中</span>
+                                </div>
+                                
+                                <!-- Visual Fire Law Storage Meter -->
+                                <div class="space-y-1">
+                                    <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden flex">
+                                        <div id="fireMeterNormal" class="h-full bg-sky-200 transition-all duration-300" style="width: 0%"></div>
+                                        <div id="fireMeterWarning" class="h-full bg-red-300 transition-all duration-300" style="width: 0%"></div>
+                                        <div id="fireMeterDanger" class="h-full bg-red-700 transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <div class="relative h-4 text-[10px] text-slate-500 font-mono">
+                                        <span class="absolute left-0">0L</span>
+                                        <span class="absolute left-[20%] -translate-x-1/2">80L (少量届出)</span>
+                                        <span class="absolute right-0">400L (指定数量)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p id="fireLawText" class="text-xs text-slate-600 leading-relaxed pt-1">
+                                アルコール手指消毒剤（エタノール等60wt%以上）は消防法上の第4類アルコール類に該当します。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION: REFERENCES -->
+                <section class="bg-white rounded-2xl p-5 sm:p-6 custom-shadow border border-slate-100 space-y-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-book-bookmark text-maruishi-800 mr-2"></i>
+                        参考情報・ガイドライン等
+                    </h2>
+                    <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+                        <li>
+                            厚生労働省：感染症法に基づく医療措置協定等における個人防護具の備蓄について<br>
+                            <a href="https://www.mhlw.go.jp/content/10800000/001271041.pdf" target="_blank" rel="noopener noreferrer" class="text-maruishi-800 hover:underline inline-flex items-center ml-4 mt-0.5 font-medium">
+                                https://www.mhlw.go.jp/content/10800000/001271041.pdf <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+                            </a>
+                        </li>
+                        <li>
+                            WHO: Guidelines on Hand Hygiene in Health Care<br>
+                            <a href="https://www.who.int/publications/i/item/9789241597906" target="_blank" rel="noopener noreferrer" class="text-maruishi-800 hover:underline inline-flex items-center ml-4 mt-0.5 font-medium">
+                                https://www.who.int/publications/i/item/9789241597906 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+                            </a>
+                        </li>
+                        <li>
+                            東京消防庁：消毒用アルコールは正しく取扱いましょう！<br>
+                            <a href="https://www.tfd.metro.tokyo.lg.jp/lfe/nichijo/arukouru.html" target="_blank" rel="noopener noreferrer" class="text-maruishi-800 hover:underline inline-flex items-center ml-4 mt-0.5 font-medium">
+                                https://www.tfd.metro.tokyo.lg.jp/lfe/nichijo/arukouru.html <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Calculation Engine -->
+    <script>
+        const MAX_WARDS = 20;
+        let activeWards = [];
+        let nextWardId = 1;
+
+        function toggleBedSection() {
+            const content = document.getElementById('bedSectionContent');
+            const chevron = document.getElementById('bedSectionChevron');
+            if (content) {
+                content.classList.toggle('hidden');
+                if (chevron) {
+                    chevron.classList.toggle('rotate-180');
+                }
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function getActiveProductList() {
+            const list = [];
+            for (let i = 1; i <= 10; i++) {
+                const elem = document.querySelector(`[data-product-id="${i}"]`);
+                if (elem && !elem.classList.contains('hidden')) {
+                    const nameInput = document.getElementById(`p${i}Name`);
+                    const name = nameInput && nameInput.value.trim() !== '' ? nameInput.value : `製品${i}`;
+                    const volInput = document.getElementById(`p${i}Volume`);
+                    const volMl = parseFloat(volInput ? volInput.value : 1000) || 1000;
+                    list.push({ index: i, name: name, volMl: volMl });
+                }
+            }
+            return list;
+        }
+
+        function onProductNameChange() {
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        function onProductVolumeChange() {
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        function renderWardBlocks() {
+            const container = document.getElementById('wardBlocksContainer');
+            const addBtn = document.getElementById('addWardBtn');
+            if (!container) return;
+
+            const activeProductList = getActiveProductList();
+            const validProductIds = new Set(activeProductList.map(p => p.index));
+
+            if (addBtn) {
+                if (activeWards.length >= MAX_WARDS) {
+                    addBtn.classList.add('hidden');
+                } else {
+                    addBtn.classList.remove('hidden');
+                }
+            }
+
+            container.innerHTML = activeWards.map((ward) => {
+                const id = ward.id;
+                if (!ward.products || ward.products.length === 0) {
+                    const defaultProdId = activeProductList.length > 0 ? activeProductList[0].index : 1;
+                    ward.products = [{ productId: defaultProdId, ratio: '100' }];
+                }
+
+                // Ensure selected productId exists in active products
+                ward.products.forEach(wp => {
+                    if (!validProductIds.has(Number(wp.productId)) && activeProductList.length > 0) {
+                        wp.productId = activeProductList[0].index;
+                    }
+                });
+
+                const ratioSum = ward.products.reduce((acc, wp) => acc + (parseFloat(wp.ratio) || 0), 0);
+                const ratioRounded = Math.round(ratioSum);
+                const ratioBadgeClass = ratioRounded === 100
+                    ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                    : 'bg-amber-100 text-amber-800 border-amber-200';
+
+                const productRowsHtml = ward.products.map((wp, pIdx) => {
+                    const optionsHtml = activeProductList.map(ap => {
+                        const selected = Number(wp.productId) === ap.index ? 'selected' : '';
+                        return `<option value="${ap.index}" ${selected}>${escapeHtml(ap.name)} (${ap.volMl}mL)</option>`;
+                    }).join('');
+
+                    const removeRowBtn = ward.products.length > 1
+                        ? `<button type="button" onclick="removeWardProduct(${id}, ${pIdx})" class="text-xs text-red-500 hover:text-red-700 px-1.5 py-1" title="削除">
+                            <i class="fa-solid fa-xmark"></i>
+                           </button>`
+                        : '';
+
+                    return `
+                        <div class="grid grid-cols-12 gap-2 items-center">
+                            <div class="col-span-7">
+                                <select onchange="updateWardProduct(${id}, ${pIdx}, 'productId', this.value)" class="w-full text-xs rounded-lg border-slate-300 border px-2.5 py-1.5 focus:ring-2 focus:ring-maruishi-800 focus:outline-none bg-white">
+                                    ${optionsHtml}
+                                </select>
+                            </div>
+                            <div class="col-span-4 flex items-center gap-1">
+                                <input type="number" value="${escapeHtml(wp.ratio)}" min="0" max="100" placeholder="割合" oninput="updateWardProductRatio(${id}, ${pIdx}, this.value)" onchange="calculateStockpile()" class="w-full text-xs rounded-lg border-slate-300 border px-2.5 py-1.5 focus:ring-2 focus:ring-maruishi-800 focus:outline-none bg-white">
+                                <span class="text-xs text-slate-500">%</span>
+                            </div>
+                            <div class="col-span-1 text-right">
+                                ${removeRowBtn}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const addProductRowBtn = ward.products.length < activeProductList.length
+                    ? `<button type="button" onclick="addWardProduct(${id})" class="mt-2 px-2.5 py-1 rounded-full text-[11px] bg-white text-maruishi-800 hover:bg-maruishi-50 font-bold border border-maruishi-200 transition-colors inline-flex items-center gap-1">
+                        <i class="fa-solid fa-plus text-[9px]"></i>使用製品を追加
+                       </button>`
+                    : '';
+
+                return `
+                    <div id="wardBlock_${id}" class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3" data-ward-id="${id}">
+                        <div class="flex justify-between items-center gap-2">
+                            <div class="w-full max-w-xs">
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">病棟名</label>
+                                <input type="text" id="wardName_${id}" value="${escapeHtml(ward.name)}" placeholder="病棟名を入力" oninput="updateWardName(${id}, this.value)" onchange="calculateStockpile()" class="w-full text-sm font-bold text-slate-800 bg-white rounded border-slate-300 border px-2 py-1">
+                            </div>
+                            <button type="button" onclick="removeWardCategory(${id})" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors flex-shrink-0">
+                                <i class="fa-solid fa-trash-can mr-1"></i>削除
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">許可病床数 (床)</label>
+                                <input type="number" id="wardBeds_${id}" value="${escapeHtml(ward.beds)}" placeholder="例: 200" min="0" oninput="updateWardField(${id}, 'beds', this.value)" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">想定病床稼働率 (%)</label>
+                                <input type="number" id="wardRate_${id}" value="${escapeHtml(ward.rate)}" placeholder="例: 80" min="0" max="100" oninput="updateWardField(${id}, 'rate', this.value)" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">患者1人あたりの手指衛生実施回数（回/人・日）</label>
+                                <input type="number" id="wardOps_${id}" value="${escapeHtml(ward.ops)}" placeholder="例: 15" min="0" oninput="updateWardField(${id}, 'ops', this.value)" onchange="calculateStockpile()" class="w-full text-sm rounded-lg border-slate-300 border px-3 py-2 focus:ring-2 focus:ring-maruishi-800 focus:outline-none bg-white">
+                            </div>
+                        </div>
+                        <div class="pt-2.5 border-t border-slate-200/80">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-xs font-semibold text-slate-600">使用製品・使用割合 (%)</label>
+                                <span id="wardRatioBadge_${id}" class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${ratioBadgeClass}">合計: ${ratioRounded}%</span>
+                            </div>
+                            <div class="space-y-2">
+                                ${productRowsHtml}
+                            </div>
+                            ${addProductRowBtn}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateWardName(id, value) {
+            const ward = activeWards.find(w => w.id === id);
+            if (ward) ward.name = value;
+        }
+
+        function updateWardField(id, field, value) {
+            const ward = activeWards.find(w => w.id === id);
+            if (ward) ward[field] = value;
+        }
+
+        function updateWardProduct(id, pIdx, field, value) {
+            const ward = activeWards.find(w => w.id === id);
+            if (ward && ward.products[pIdx]) {
+                ward.products[pIdx][field] = Number(value);
+                calculateStockpile();
+            }
+        }
+
+        function updateWardProductRatio(id, pIdx, value) {
+            const ward = activeWards.find(w => w.id === id);
+            if (ward && ward.products[pIdx]) {
+                ward.products[pIdx].ratio = value;
+                const badge = document.getElementById(`wardRatioBadge_${id}`);
+                if (badge) {
+                    const ratioSum = ward.products.reduce((acc, wp) => acc + (parseFloat(wp.ratio) || 0), 0);
+                    const ratioRounded = Math.round(ratioSum);
+                    badge.innerText = `合計: ${ratioRounded}%`;
+                    badge.className = ratioRounded === 100
+                        ? 'text-[10px] font-bold px-2 py-0.5 rounded-full border bg-emerald-100 text-emerald-800 border-emerald-200'
+                        : 'text-[10px] font-bold px-2 py-0.5 rounded-full border bg-amber-100 text-amber-800 border-amber-200';
+                }
+                calculateStockpile();
+            }
+        }
+
+        function addWardProduct(id) {
+            const ward = activeWards.find(w => w.id === id);
+            if (!ward) return;
+            const activeProductList = getActiveProductList();
+            const usedIds = new Set(ward.products.map(wp => Number(wp.productId)));
+            const nextProd = activeProductList.find(ap => !usedIds.has(ap.index)) || activeProductList[0];
+            if (nextProd) {
+                ward.products.push({ productId: nextProd.index, ratio: '0' });
+                renderWardBlocks();
+                calculateStockpile();
+            }
+        }
+
+        function removeWardProduct(id, pIdx) {
+            const ward = activeWards.find(w => w.id === id);
+            if (!ward || ward.products.length <= 1) return;
+            ward.products.splice(pIdx, 1);
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        function addWardCategory() {
+            if (activeWards.length >= MAX_WARDS) return;
+            const id = nextWardId++;
+            const activeProductList = getActiveProductList();
+            const defaultProdId = activeProductList.length > 0 ? activeProductList[0].index : 1;
+            activeWards.push({
+                id: id,
+                name: `病棟${activeWards.length + 1}`,
+                beds: '',
+                rate: '',
+                ops: '',
+                products: [{ productId: defaultProdId, ratio: '100' }]
+            });
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        function removeWardCategory(id) {
+            activeWards = activeWards.filter(w => w.id !== id);
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        const scenarioNotes = {
+            earthquake: [
+                "・災害拠点病院の指定要件では、食料・飲料水・医薬品等について、流通を通じて適切に供給されるまでに必要な量として、３日分程度の備蓄が示されています。",
+                "・アルコール手指消毒剤については、断水や物流停止の想定、施設の診断継続計画などを踏まえて備蓄日数を設定してください。"
+            ],
+            pandemic: [
+                "・厚生労働省は、医療措置協定で備蓄を定める医療機関について、対象となる個人防護具（PPE）の使用量2か月分以上の備蓄を推奨しています。",
+                "・対象となるPPEは、サージカルマスク、N95マスク、アイソレーションガウン、フェイスシールド、非滅菌手袋です。アルコール手指消毒剤は、この推奨の対象品目に含まれません。",
+                "・アルコール手指消毒剤の備蓄日数は、感染症流行時の使用実績や需要の変化、供給見通しなどを踏まえて設定してください。"
+            ],
+            custom: [
+                "・施設の事業継続計画（BCP）、過去の使用実績、調達先との供給契約などを踏まえて、備蓄対象日数を設定してください。"
+            ]
+        };
+
+        const scenarioReferences = {
+            earthquake: "参考：３日分程度（災害拠点病院の食料・水・医薬品等）",
+            pandemic: "参考：PPEは使用量2か月分以上（アルコール手指消毒剤には直接適応されません）",
+            custom: "参考：施設BCP・使用実績・供給体制に応じて設定"
+        };
+
+        function renderTabs() {
+            const container = document.getElementById('productTabsContainer');
+            if (!container) return;
+
+            let activeCount = 0;
+            for (let i = 1; i <= 10; i++) {
+                const elem = document.querySelector(`[data-product-id="${i}"]`);
+                if (elem && !elem.classList.contains('hidden')) {
+                    activeCount++;
+                }
+            }
+
+            let html = '';
+            if (activeCount < 10) {
+                html += `<button type="button" onclick="addProductTab()" class="px-3 py-1.5 rounded-full text-xs bg-maruishi-50 text-maruishi-800 hover:bg-maruishi-100 font-bold border border-maruishi-200 transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-plus text-[10px]"></i> 製品を追加
+                </button>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function addProductTab() {
+            for (let i = 1; i <= 10; i++) {
+                const elem = document.querySelector(`[data-product-id="${i}"]`);
+                if (elem && elem.classList.contains('hidden')) {
+                    elem.classList.remove('hidden');
+                    break;
+                }
+            }
+            renderTabs();
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        function removeProduct(productNum) {
+            const elem = document.querySelector(`[data-product-id="${productNum}"]`);
+            if (elem) {
+                elem.classList.add('hidden');
+                const qtyInput = document.getElementById(`p${productNum}MonthlyQty`);
+                if (qtyInput) qtyInput.value = '0';
+                const nonHazInput = document.getElementById(`p${productNum}NonHazardous`);
+                if (nonHazInput) nonHazInput.checked = false;
+            }
+            renderTabs();
+            renderWardBlocks();
+            calculateStockpile();
+        }
+
+        function removeProduct(productNum) {
+            const elem = document.querySelector(`[data-product-id="${productNum}"]`);
+            if (elem) {
+                elem.classList.add('hidden');
+                const qtyInput = document.getElementById(`p${productNum}MonthlyQty`);
+                if (qtyInput) qtyInput.value = '0';
+                const nonHazInput = document.getElementById(`p${productNum}NonHazardous`);
+                if (nonHazInput) nonHazInput.checked = false;
+            }
+            renderTabs();
+            calculateStockpile();
+        }
+
+        function updateDefaultDays() {
+            const scenario = document.getElementById('disasterType').value;
+            const daysInput = document.getElementById('stockpileDays');
+            const refText = document.getElementById('scenarioReferenceText');
+            
+            if (scenario === 'earthquake') {
+                daysInput.value = 3;
+            } else if (scenario === 'pandemic') {
+                daysInput.value = 60;
+            } else {
+                daysInput.value = 30;
+            }
+
+            if (refText && scenarioReferences[scenario]) {
+                refText.innerText = scenarioReferences[scenario];
+            }
+
+            renderScenarioNotes(scenario);
+            calculateStockpile();
+        }
+
+        function renderScenarioNotes(scenario) {
+            const container = document.getElementById('scenarioNotesContainer');
+            if (!container) return;
+            const notes = scenarioNotes[scenario] || [];
+            container.innerHTML = notes.map(note => `<p class="leading-relaxed">${note}</p>`).join('');
+        }
+
+        function calculateStockpile() {
+            const days = parseFloat(document.getElementById('stockpileDays')?.value) || 60;
+            const months = days / 30; // 1 month = 30 days
+
+            // 1. Gather Active Products and calculate Payout shares
+            let activeProducts = [];
+            let activeProductMap = {};
+            let totalPayoutLitresMonthly = 0;
+
+            for (let i = 1; i <= 10; i++) {
+                const elem = document.querySelector(`[data-product-id="${i}"]`);
+                if (elem && !elem.classList.contains('hidden')) {
+                    const nameInput = document.getElementById(`p${i}Name`);
+                    const name = nameInput ? nameInput.value : `製品${i}`;
+                    const volInput = document.getElementById(`p${i}Volume`);
+                    const volMl = parseFloat(volInput ? volInput.value : 1000) || 1000;
+                    const doseInput = document.getElementById(`p${i}Dose`);
+                    const doseMl = parseFloat(doseInput ? doseInput.value : 3.0) || 3.0;
+                    const qtyInput = document.getElementById(`p${i}MonthlyQty`);
+                    const monthlyQty = parseFloat(qtyInput ? qtyInput.value : 0) || 0;
+                    const nonHazInput = document.getElementById(`p${i}NonHazardous`);
+                    const isNonHazardous = nonHazInput ? nonHazInput.checked : false;
+                    const isHazardous = !isNonHazardous;
+
+                    const volL = volMl / 1000;
+                    const payoutMonthlyL = monthlyQty * volL;
+                    totalPayoutLitresMonthly += payoutMonthlyL;
+
+                    const prodObj = {
+                        index: i,
+                        name: name,
+                        volMl: volMl,
+                        volL: volL,
+                        doseMl: doseMl,
+                        monthlyQty: monthlyQty,
+                        payoutMonthlyL: payoutMonthlyL,
+                        isHazardous: isHazardous
+                    };
+                    activeProducts.push(prodObj);
+                    activeProductMap[i] = prodObj;
+                }
+            }
+
+            // 2. Calculate Base Payout totals
+            let totalPayoutLitres = 0;
+            let totalHazardousLitres = 0;
+            let totalHazardousBottles = 0;
+            let totalNonHazardousLitres = 0;
+            let totalNonHazardousBottles = 0;
+            let productDetails = [];
+
+            activeProducts.forEach(p => {
+                // Base: Payout required bottles and volume in Litres
+                const requiredBottles = Math.ceil(p.monthlyQty * months);
+                const requiredLitres = requiredBottles * p.volL;
+
+                if (p.isHazardous) {
+                    totalHazardousLitres += requiredLitres;
+                    totalHazardousBottles += requiredBottles;
+                } else {
+                    totalNonHazardousLitres += requiredLitres;
+                    totalNonHazardousBottles += requiredBottles;
+                }
+
+                totalPayoutLitres += requiredLitres;
+
+                productDetails.push({
+                    name: p.name,
+                    volMl: p.volMl,
+                    monthlyQty: p.monthlyQty,
+                    requiredBottles: requiredBottles,
+                    requiredLitres: requiredLitres,
+                    isHazardous: p.isHazardous
+                });
+            });
+
+            // 3. Calculate Ward-by-Ward & Product-by-Product Reference Quantities
+            let totalWardDailyOps = 0;
+            let totalWardLitres = 0;
+            let totalWardDailyLitres = 0;
+            let wardResults = [];
+
+            activeWards.forEach(w => {
+                const wardNameInput = document.getElementById(`wardName_${w.id}`);
+                const wardName = (wardNameInput && wardNameInput.value.trim() !== '') ? wardNameInput.value.trim() : (w.name || `病棟`);
+                const beds = parseFloat(document.getElementById(`wardBeds_${w.id}`)?.value) || 0;
+                const rate = (parseFloat(document.getElementById(`wardRate_${w.id}`)?.value) || 0) / 100;
+                const ops = parseFloat(document.getElementById(`wardOps_${w.id}`)?.value) || 0;
+                const wardDailyOps = beds * rate * ops;
+                totalWardDailyOps += wardDailyOps;
+
+                // Aggregate product ratios within this ward (in case same product is selected multiple times)
+                const prodRatioMap = {};
+                (w.products || []).forEach(wp => {
+                    const pid = Number(wp.productId);
+                    const r = (parseFloat(wp.ratio) || 0) / 100;
+                    if (activeProductMap[pid] && r > 0) {
+                        prodRatioMap[pid] = (prodRatioMap[pid] || 0) + r;
+                    }
+                });
+
+                let wardTotalLitresForPeriod = 0;
+                let wardTotalDailyLitres = 0;
+                let wardProductsBreakdown = [];
+
+                Object.keys(prodRatioMap).forEach(pidStr => {
+                    const pid = Number(pidStr);
+                    const p = activeProductMap[pid];
+                    const share = prodRatioMap[pid];
+                    const opsForProd = wardDailyOps * share;
+                    const dailyLitresForProd = (opsForProd * p.doseMl) / 1000;
+                    const periodLitresForProd = dailyLitresForProd * days;
+                    const bottlesForProd = p.volL > 0 ? Math.ceil(periodLitresForProd / p.volL) : 0;
+
+                    wardTotalDailyLitres += dailyLitresForProd;
+                    wardTotalLitresForPeriod += periodLitresForProd;
+
+                    wardProductsBreakdown.push({
+                        name: p.name,
+                        volMl: p.volMl,
+                        ratioPct: Math.round(share * 100),
+                        requiredBottles: bottlesForProd,
+                        requiredLitres: periodLitresForProd
+                    });
+                });
+
+                totalWardDailyLitres += wardTotalDailyLitres;
+                totalWardLitres += wardTotalLitresForPeriod;
+
+                wardResults.push({
+                    wardName: wardName,
+                    wardDailyOps: wardDailyOps,
+                    wardDailyLitres: wardTotalDailyLitres,
+                    wardPeriodLitres: wardTotalLitresForPeriod,
+                    products: wardProductsBreakdown
+                });
+            });
+
+            // Update UI Summary Elements (Base: Payout)
+            const elDisasterLitres = document.getElementById('resDisasterLitres');
+            if (elDisasterLitres) elDisasterLitres.innerText = totalPayoutLitres.toFixed(1);
+
+            const elHazLitres = document.getElementById('resHazardousLitres');
+            if (elHazLitres) elHazLitres.innerText = totalHazardousLitres.toFixed(1);
+            const elHazBottles = document.getElementById('resHazardousBottles');
+            if (elHazBottles) elHazBottles.innerText = totalHazardousBottles.toLocaleString();
+
+            const elNonHazLitres = document.getElementById('resNonHazardousLitres');
+            if (elNonHazLitres) elNonHazLitres.innerText = totalNonHazardousLitres.toFixed(1);
+            const elNonHazBottles = document.getElementById('resNonHazardousBottles');
+            if (elNonHazBottles) elNonHazBottles.innerText = totalNonHazardousBottles.toLocaleString();
+
+            const elDisasterTag = document.getElementById('resDisasterDaysTag');
+            if (elDisasterTag) elDisasterTag.innerText = `${days}日分想定`;
+
+            // Update Optional Ward Reference Box visibility and values
+            const anyBedActive = activeWards.length > 0;
+            const wardRefBox = document.getElementById('wardReferenceBox');
+            if (wardRefBox) {
+                if (anyBedActive) {
+                    wardRefBox.classList.remove('hidden');
+                } else {
+                    wardRefBox.classList.add('hidden');
+                }
+            }
+
+            const elWardLitres = document.getElementById('resWardLitres');
+            if (elWardLitres) elWardLitres.innerText = totalWardLitres.toFixed(1);
+
+            const elWardDailyLitres = document.getElementById('resWardDailyLitres');
+            if (elWardDailyLitres) elWardDailyLitres.innerText = totalWardDailyLitres.toFixed(2);
+
+            const elWardDailyOps = document.getElementById('resWardDailyOps');
+            if (elWardDailyOps) elWardDailyOps.innerText = Math.round(totalWardDailyOps).toLocaleString();
+
+            const elWardTag = document.getElementById('resWardDaysTag');
+            if (elWardTag) elWardTag.innerText = `${days}日分目安`;
+
+            // Update Bottle Counts breakdown
+            updateBottleBreakdown(productDetails);
+            updateWardBottleBreakdown(wardResults);
+
+            // Update Fire Law Alert & Visual Gauge (based on hazardous stockpile volume)
+            updateFireLawNotice(totalHazardousLitres);
+        }
+
+        function updateBottleBreakdown(productDetails) {
+            const container = document.getElementById('bottleCountBreakdown');
+            if (!container) return;
+
+            let html = '';
+            productDetails.forEach(p => {
+                const hazTag = p.isHazardous
+                    ? '<span class="ml-1.5 text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">危険物</span>'
+                    : '<span class="ml-1.5 text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">非危険物</span>';
+                html += `<div class="flex justify-between items-center py-1 border-b border-maruishi-200/40 last:border-0">
+                    <span>・${escapeHtml(p.name)} (${p.volMl}mL本)${hazTag}:</span>
+                    <span class="font-bold text-maruishi-900 text-sm">${p.requiredBottles.toLocaleString()} 本 <span class="text-xs font-normal text-slate-600">(${p.requiredLitres.toFixed(1)} L)</span></span>
+                </div>`;
+            });
+
+            if (html === '') {
+                html = '<div class="text-slate-400 italic">使用実績が設定されている製品はありません</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function updateWardBottleBreakdown(wardResults) {
+            const container = document.getElementById('wardBottleBreakdown');
+            if (!container) return;
+
+            let html = '';
+            wardResults.forEach(w => {
+                let prodRowsHtml = '';
+                if (w.products.length > 0) {
+                    prodRowsHtml = w.products.map(p => `
+                        <div class="flex justify-between items-center py-0.5 pl-2 text-xs">
+                            <span>・${escapeHtml(p.name)} (${p.volMl}mL本 / ${p.ratioPct}%):</span>
+                            <span class="font-bold text-slate-800">${p.requiredBottles.toLocaleString()} 本目安 <span class="text-[11px] font-normal text-slate-500">(${p.requiredLitres.toFixed(1)} L)</span></span>
+                        </div>
+                    `).join('');
+                } else {
+                    prodRowsHtml = '<div class="pl-2 text-[11px] text-slate-400 italic">使用製品・割合が設定されていません</div>';
+                }
+
+                html += `
+                    <div class="py-1.5 border-b border-slate-200/80 last:border-0 space-y-1">
+                        <div class="flex justify-between items-center font-bold text-slate-800 text-xs">
+                            <span>【${escapeHtml(w.wardName)}】</span>
+                            <span class="text-[11px] font-semibold text-slate-600">計 ${w.wardPeriodLitres.toFixed(1)} L（${Math.round(w.wardDailyOps).toLocaleString()} 回/日）</span>
+                        </div>
+                        ${prodRowsHtml}
+                    </div>
+                `;
+            });
+
+            if (html === '') {
+                html = '<div class="text-slate-400 italic">病棟が設定されていません</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function updateFireLawNotice(disasterLitres) {
+            const alertText = document.getElementById('fireLawText');
+            const badge = document.getElementById('fireLawBadge');
+            const meterNormal = document.getElementById('fireMeterNormal');
+            const meterWarning = document.getElementById('fireMeterWarning');
+            const meterDanger = document.getElementById('fireMeterDanger');
+
+            if (!alertText) return;
+
+            // Scale mapping: 0L -> 0%, 80L -> 20%, 400L -> 100%
+            let totalPercent = 0;
+            if (disasterLitres <= 0) {
+                totalPercent = 0;
+            } else if (disasterLitres <= 80) {
+                totalPercent = (disasterLitres / 80) * 20;
+            } else {
+                totalPercent = Math.min(100, 20 + ((disasterLitres - 80) / 320) * 80);
+            }
+
+            const normalWidth = Math.max(0, Math.min(20, totalPercent));
+            const warningWidth = Math.max(0, Math.min(80, totalPercent - 20));
+            const dangerWidth = Math.max(0, Math.min(100, totalPercent - 100));
+
+            if (disasterLitres >= 400) {
+                alertText.innerHTML = `<span class="text-red-700 font-bold">【指定数量以上（400L以上）】</span> 備蓄予定量が400L（指定数量）以上です。消防法上の危険物貯蔵所としての危険物施設設置許可および危険物構造・設備の適合基準遵守が必要です。`;
+                if (badge) {
+                    badge.innerText = '指定数量以上 (許可要)';
+                    badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800 border border-red-200';
+                }
+            } else if (disasterLitres >= 80) {
+                alertText.innerHTML = `<span class="text-amber-700 font-bold">【少量危険物（80L〜400L未満）】</span> 備蓄予定量が80L以上400L未満です。市町村の火災予防条例に基づく少量危険物貯蔵・取扱いの届出および安全基準の遵守が必要です。`;
+                if (badge) {
+                    badge.innerText = '少量危険物 (届出要)';
+                    badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200';
+                }
+            } else {
+                alertText.innerHTML = `備蓄予定量は80L未満（指定数量の1/5未満）です。通常の火気注意のもと保管が可能ですが、直射日光を避け冷暗所で保管してください。`;
+                if (badge) {
+                    badge.innerText = '一般保管可能 (80L未満)';
+                    badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200';
+                }
+            }
+
+            if (meterNormal) meterNormal.style.width = `${normalWidth}%`;
+            if (meterWarning) meterWarning.style.width = `${warningWidth}%`;
+            if (meterDanger) meterDanger.style.width = `${dangerWidth}%`;
+        }
+
+        window.onload = function() {
+            renderScenarioNotes('pandemic');
+            renderTabs();
+            renderWardBlocks();
+            calculateStockpile();
+        };
+    </script>
+</body>
+</html>
